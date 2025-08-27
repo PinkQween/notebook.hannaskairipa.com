@@ -5,7 +5,7 @@ import shutil
 # Paths
 posts_dir = "/Users/skairipa/notebook.hannaskairipa.com/content"
 attachments_dir = "/Users/skairipa/Documents/obsidian/Attachments/"
-static_images_dir = "/Users/skairipa/Documents/obsidian/static/images/"
+static_images_dir = "/Users/skairipa/Documents/Obsidian/static/images/"
 
 # Step 1: Process each markdown file in the posts directory
 for filename in os.listdir(posts_dir):
