@@ -5,9 +5,6 @@ set -euo pipefail
 sourcePath="/Users/skairipa/Documents/Obsidian/"
 destinationPath="/Users/skairipa/notebook.hannaskairipa.com/content"
 
-# GitHub repo URL (SSH is best, not HTTPS)
-myrepo="git@github.com:pinkqween/notebook.git"
-
 # Go to script directory (your Hugo site)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
