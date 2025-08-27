@@ -1,6 +1,6 @@
 baseURL = "/"
 languageCode = "en-us"
-theme = "terminal"
+theme = "re-terminal"
 
 # Ignore "private/" and anything starting with "_"
 ignoreFiles = ["(^|/)private(/.*)?$", "(^|/)_.*"]
