@@ -11,10 +11,14 @@
             "id": "ef751e8ed3ac2cc9",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "test.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "test"
             }
           }
         ]
@@ -181,6 +185,7 @@
   },
   "active": "ef751e8ed3ac2cc9",
   "lastOpenFiles": [
+    "wp4162242.png",
     "Aviation Note test.md",
     "test.md",
     "Welcome.md"
