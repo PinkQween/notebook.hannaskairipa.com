@@ -1,0 +1,16 @@
+baseURL = "/"
+languageCode = "en-us"
+theme = "terminal"
+
+# Ignore "private/" and anything starting with "_"
+ignoreFiles = ["(^|/)private(/.*)?$", "(^|/)_.*"]
+
+[params]
+  themeColor = "pink"
+  showMenuItems = 2
+  showLanguageSelector = false
+  fullWidthTheme = false
+  centerTheme = true
+  autoCover = true
+  showLastUpdated = false
+
