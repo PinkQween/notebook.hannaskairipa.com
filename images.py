@@ -1,37 +1,51 @@
 import os
 import re
 import shutil
+from pathlib import Path
 
 # Paths
-posts_dir = "/Users/skairipa/notebook.hannaskairipa.com/content"
-attachments_dir = "/Users/skairipa/Documents/obsidian/Attachments/"
-static_images_dir = "/Users/skairipa/Documents/Obsidian/static/images/"
+posts_dir = Path("/Users/skairipa/notebook.hannaskairipa.com/content")
+attachments_dir = Path("/Users/skairipa/Documents/obsidian/Attachments")
+static_images_dir = Path("/Users/skairipa/Documents/Obsidian/static/images")
 
-# Step 1: Process each markdown file in the posts directory
-for filename in os.listdir(posts_dir):
-    if filename.endswith(".md"):
-        filepath = os.path.join(posts_dir, filename)
-        
-        with open(filepath, "r") as file:
-            content = file.read()
-        
-        # Step 2: Find all image links in the format ![Image Description](/images/Pasted%20image%20...%20.png)
-        images = re.findall(r'\[\[([^]]*\.png)\]\]', content)
-        
-        # Step 3: Replace image links and ensure URLs are correctly formatted
-        for image in images:
-            # Prepare the Markdown-compatible link with %20 replacing spaces
-            markdown_image = f"![Image Description](/images/{image.replace(' ', '%20')})"
-            content = content.replace(f"[[{image}]]", markdown_image)
-            
-            # Step 4: Copy the image to the Hugo static/images directory if it exists
-            image_source = os.path.join(attachments_dir, image)
-            if os.path.exists(image_source):
-                shutil.copy(image_source, static_images_dir)
+# Ensure the static images directory exists
+static_images_dir.mkdir(parents=True, exist_ok=True)
 
-        # Step 5: Write the updated content back to the markdown file
-        with open(filepath, "w") as file:
-            file.write(content)
+# Regex to match common image references: [[file.png]] or ![[file.png]]
+image_pattern = re.compile(r'!?\[\[([^]]+\.(?:png|jpg|jpeg|gif))\]\]', re.IGNORECASE)
+
+# Build a map of all images in attachments (including subfolders)
+image_map = {img.name: img for img in attachments_dir.rglob("*") if img.is_file()}
+
+for md_file in posts_dir.glob("*.md"):
+    try:
+        content = md_file.read_text(encoding="utf-8")
+    except Exception as e:
+        print(f"Failed to read {md_file}: {e}")
+        continue
+
+    images = image_pattern.findall(content)
+
+    for image_name in images:
+        # Clean up filename for Markdown
+        safe_name = image_name.replace(" ", "%20")
+        markdown_image = f"![{Path(image_name).stem}](/images/{safe_name})"
+        content = content.replace(f"[[{image_name}]]", markdown_image).replace(f"![[{image_name}]]", markdown_image)
+
+        # Find image in attachments anywhere
+        source_path = image_map.get(image_name)
+        if source_path:
+            try:
+                shutil.copy2(source_path, static_images_dir / image_name)
+            except Exception as e:
+                print(f"Failed to copy {image_name}: {e}")
+        else:
+            print(f"Image not found anywhere: {image_name}")
+
+    # Write the updated content back
+    try:
+        md_file.write_text(content, encoding="utf-8")
+    except Exception as e:
+        print(f"Failed to write {md_file}: {e}")
 
 print("Markdown files processed and images copied successfully.")
-
